@@ -1,0 +1,24 @@
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Local tooling caches
+.code-review-graph/
