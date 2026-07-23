@@ -33,11 +33,11 @@ Steps mirror the six graded questions:
 - [ ] Q4: Implement TODO logic; note which file holds it
 - [ ] Q5: Create `base.html` + `home.html`; note where the template directory is registered
 - [ ] Q6: AI-generated tests — review scenarios, run them; note the test command
-- [ ] Run with `python manage.py runserver`, iterate until it works
-- [ ] Push code to GitHub in a folder like `01-todo/`, submit folder link
+- [ ] Run with `uv run python manage.py runserver`, iterate until it works
+- [ ] Push code to GitHub in the root-level `01-todo/` folder, submit folder link
 
 Submission form: https://courses.datatalks.club/ai-dev-tools-2025/homework/hw1
 
 ## Homework Code Location
 
-Homework code goes in `01-overview/01-todo/` in this repo (repo needs a GitHub remote before submission).
+Homework code lives in the root-level `01-todo/` folder (per homework instructions — submission link points at that folder). This module folder keeps notes only.

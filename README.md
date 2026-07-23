@@ -13,6 +13,7 @@ Disciplined AI-assisted software development: comparing AI dev tools, spec-drive
 | `CLAUDE.md` | Workspace context and conventions for AI agents | Done |
 | `README.md` | This inventory | Done |
 | `01-overview/` | Module 1: AI-Native Developer Workflow | Prep notes + homework 1 checklist in its README |
+| `01-todo/` | Module 1 homework: Django TODO app (submission folder) | CLAUDE.md ready — app not started |
 | `02-end-to-end/` | Module 2: Build and Ship an AI-Assisted Full-Stack App | Empty |
 | `03-mcp/` | Module 3: MCP, Skills, Plugins, and Custom Agents | Empty |
 | `04-ai-security-audit-devops/` | Module 4: AI Tools for Security, Audit, and DevOps | Empty |

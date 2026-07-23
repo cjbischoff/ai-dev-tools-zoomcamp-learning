@@ -13,6 +13,7 @@ Folders mirror the course repo modules:
 | Folder | Module |
 | --- | --- |
 | `01-overview/` | AI-Native Developer Workflow — spec, backlog, AGENTS.md, agent roles |
+| `01-todo/` | Module 1 homework: Django TODO app (root-level folder per homework instructions — submission form takes a link to this folder) |
 | `02-end-to-end/` | Full-stack app: spec, frontend, OpenAPI, FastAPI/Django backend, DB, tests, Docker, deploy, CI/CD |
 | `03-mcp/` | MCP, skills, plugins, hooks, subagents, custom agent extensions |
 | `04-ai-security-audit-devops/` | PR review, security scanning, audit, diagnostics tooling |
