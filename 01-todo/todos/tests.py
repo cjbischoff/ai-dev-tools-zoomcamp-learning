@@ -56,3 +56,15 @@ class TodoListTests(TestCase):
         self.assertRedirects(response, "/")
         todo.refresh_from_db()
         self.assertTrue(todo.resolved)
+
+    def test_delete_todo(self):
+        """Deleting a TODO removes it from the list."""
+        todo = Todo.objects.create(
+            title="Remove this task",
+            due_date=date(2026, 9, 7),
+        )
+
+        response = self.client.post(f"/{todo.pk}/delete/")
+
+        self.assertRedirects(response, "/")
+        self.assertFalse(Todo.objects.filter(pk=todo.pk).exists())

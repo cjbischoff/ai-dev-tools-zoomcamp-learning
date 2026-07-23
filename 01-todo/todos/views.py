@@ -43,3 +43,11 @@ def resolve_todo(request, pk):
     todo.resolved = True
     todo.save(update_fields=["resolved"])
     return redirect("todos:home")
+
+
+@require_POST
+def delete_todo(request, pk):
+    """Delete an existing TODO."""
+    todo = get_object_or_404(Todo, pk=pk)
+    todo.delete()
+    return redirect("todos:home")

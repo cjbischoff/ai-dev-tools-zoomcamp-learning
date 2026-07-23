@@ -23,6 +23,10 @@
         </form>
         {% endif %}
         <a href="{% url 'todos:edit' todo.pk %}">Edit</a>
+        <form method="post" action="{% url 'todos:delete' todo.pk %}">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
     </li>
     {% endfor %}
 </ul>
