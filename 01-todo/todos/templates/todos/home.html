@@ -1,0 +1,36 @@
+{% extends "todos/base.html" %}
+
+{% block title %}TODO List{% endblock %}
+
+{% block content %}
+<h1>TODO List</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add TODO</button>
+</form>
+{% if todos %}
+<ul>
+    {% for todo in todos %}
+    <li>
+        {{ todo.title }} — due {{ todo.due_date|date:"N j, Y" }}
+        {% if todo.resolved %}
+        <strong>Resolved</strong>
+        {% else %}
+        <form method="post" action="{% url 'todos:resolve' todo.pk %}">
+            {% csrf_token %}
+            <button type="submit">Resolve</button>
+        </form>
+        {% endif %}
+        <a href="{% url 'todos:edit' todo.pk %}">Edit</a>
+        <form method="post" action="{% url 'todos:delete' todo.pk %}">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No TODOs yet.</p>
+{% endif %}
+{% endblock %}
