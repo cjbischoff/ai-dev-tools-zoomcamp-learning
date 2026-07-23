@@ -1,6 +1,6 @@
-# Module 1 — AI-Native Developer Workflow
+# Module 1 — Django TODO App
 
-Upstream materials: https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/tree/main/01-overview
+Upstream materials: [Module 1 overview](https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/tree/main/01-overview)
 (2026 module page is a draft; content may change before Aug 31, 2026.)
 
 ## What the Module Teaches
@@ -27,17 +27,31 @@ Build a Django TODO app with an AI tool (no Django knowledge required). Features
 
 Steps mirror the six graded questions:
 
-- [ ] Q1: Install Django (record the install command AI suggests)
-- [ ] Q2: Create project + app; note which file registers the app in the project
-- [ ] Q3: Define models; note the next step after models
-- [ ] Q4: Implement TODO logic; note which file holds it
-- [ ] Q5: Create `base.html` + `home.html`; note where the template directory is registered
-- [ ] Q6: AI-generated tests — review scenarios, run them; note the test command
-- [ ] Run with `uv run python manage.py runserver`, iterate until it works
+- [x] Q1: Install Django (record the install command AI suggests)
+- [x] Q2: Create project + app; note which file registers the app in the project
+- [x] Q3: Define models; note the next step after models
+- [x] Q4: Implement TODO logic; note which file holds it
+- [x] Q5: Create `base.html` + `home.html`; note where the template directory is registered
+- [x] Q6: AI-generated tests — review scenarios, run them; note the test command
+- [x] Run with `uv run python manage.py runserver`, iterate until it works
 - [ ] Push code to GitHub in the root-level `01-todo/` folder, submit folder link
 
-Submission form: https://courses.datatalks.club/ai-dev-tools-2025/homework/hw1
+Submission form: [Homework 1](https://courses.datatalks.club/ai-dev-tools-2025/homework/hw1)
 
 ## Homework Code Location
 
-Homework code lives in the root-level `01-todo/` folder (per homework instructions — submission link points at that folder). This module folder keeps notes only.
+Homework code and module notes live in this root-level `01-todo/` folder, which is the submission target.
+
+## Testing
+
+Run all 13 functional tests from this folder:
+
+```shell
+uv run python manage.py test
+```
+
+The suite covers the empty state, creating and editing TODOs, validation failures, due dates, resolving and deleting TODOs, HTTP method restrictions, missing TODOs, and the complete create-to-delete workflow.
+
+## Automated Tests
+
+The GitHub Actions workflow at `.github/workflows/todo-tests.yml` installs locked dependencies, checks Django configuration and migrations, and runs the full test suite. It runs automatically when a push or pull request changes the TODO app or its workflow. It can also be started manually from the repository's **Actions** tab.
