@@ -4,5 +4,18 @@
 
 {% block content %}
 <h1>TODO List</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add TODO</button>
+</form>
+{% if todos %}
+<ul>
+    {% for todo in todos %}
+    <li>{{ todo.title }} — due {{ todo.due_date }}</li>
+    {% endfor %}
+</ul>
+{% else %}
 <p>No TODOs yet.</p>
+{% endif %}
 {% endblock %}
