@@ -14,6 +14,14 @@
     {% for todo in todos %}
     <li>
         {{ todo.title }} — due {{ todo.due_date }}
+        {% if todo.resolved %}
+        <strong>Resolved</strong>
+        {% else %}
+        <form method="post" action="{% url 'todos:resolve' todo.pk %}">
+            {% csrf_token %}
+            <button type="submit">Resolve</button>
+        </form>
+        {% endif %}
         <a href="{% url 'todos:edit' todo.pk %}">Edit</a>
     </li>
     {% endfor %}

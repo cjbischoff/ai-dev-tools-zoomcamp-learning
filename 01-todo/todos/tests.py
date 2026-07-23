@@ -43,3 +43,16 @@ class TodoListTests(TestCase):
         todo.refresh_from_db()
         self.assertEqual(todo.title, "Finish homework")
         self.assertEqual(todo.due_date, date(2026, 9, 8))
+
+    def test_resolve_todo(self):
+        """Resolving a TODO marks it complete."""
+        todo = Todo.objects.create(
+            title="Finish homework",
+            due_date=date(2026, 9, 7),
+        )
+
+        response = self.client.post(f"/{todo.pk}/resolve/")
+
+        self.assertRedirects(response, "/")
+        todo.refresh_from_db()
+        self.assertTrue(todo.resolved)

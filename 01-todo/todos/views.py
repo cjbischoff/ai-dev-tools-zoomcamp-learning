@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
 from .forms import TodoForm
 from .models import Todo
@@ -33,3 +34,12 @@ def edit_todo(request, pk):
         form = TodoForm(instance=todo)
 
     return render(request, "todos/todo_form.html", {"form": form})
+
+
+@require_POST
+def resolve_todo(request, pk):
+    """Mark an existing TODO as resolved."""
+    todo = get_object_or_404(Todo, pk=pk)
+    todo.resolved = True
+    todo.save(update_fields=["resolved"])
+    return redirect("todos:home")
