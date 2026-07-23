@@ -12,7 +12,7 @@ Disciplined AI-assisted software development: comparing AI dev tools, spec-drive
 | --- | --- | --- |
 | `CLAUDE.md` | Workspace context and conventions for AI agents | Done |
 | `README.md` | This inventory | Done |
-| `01-overview/` | Module 1: AI-Native Developer Workflow | Empty — awaiting cohort start |
+| `01-overview/` | Module 1: AI-Native Developer Workflow | Prep notes + homework 1 checklist in its README |
 | `02-end-to-end/` | Module 2: Build and Ship an AI-Assisted Full-Stack App | Empty |
 | `03-mcp/` | Module 3: MCP, Skills, Plugins, and Custom Agents | Empty |
 | `04-ai-security-audit-devops/` | Module 4: AI Tools for Security, Audit, and DevOps | Empty |
@@ -29,4 +29,5 @@ Disciplined AI-assisted software development: comparing AI dev tools, spec-drive
 1. Register for the cohort: https://courses.datatalks.club/register/ai-dev-tools/
 2. Join the course Slack channel (#course-ai-dev-tools-zoomcamp) and Telegram announcements.
 3. Optional: RSVP for the pre-course workshops (workflow, full-stack build, agent capabilities, security/DevOps) — links in the course README.
-4. When Module 1 opens (Aug 31, 2026), pull the module materials and start homework in `01-overview/`.
+4. Create a GitHub remote for this repo (homework submissions require a public folder link).
+5. Homework 1 (Django TODO app) can be attempted now from the 2026 draft — checklist in `01-overview/README.md`; confirm against final version when the cohort opens Aug 31, 2026.
