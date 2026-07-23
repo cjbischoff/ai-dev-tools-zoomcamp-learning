@@ -20,6 +20,8 @@ Folders mirror the course repo modules:
 
 ## Conventions
 
+- One branch per module (e.g. `module/01-overview`), covering that module's learning notes AND homework. Merge to main when the module wraps.
+- Incremental commits within the branch — one logical change each (lesson notes, homework step, etc.), conventional-commit format.
 - Homework and notes live inside the matching module folder.
 - Each module gets its own README as work accumulates.
 - Global rules apply: conventional commits, GPG-signed, feature branches for work, no AI attribution in commits, TDD for new Python/TS/Go code, full docstrings on public functions.
