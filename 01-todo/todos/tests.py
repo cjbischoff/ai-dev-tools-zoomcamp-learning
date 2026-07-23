@@ -1,4 +1,8 @@
+from datetime import date
+
 from django.test import TestCase
+
+from .models import Todo
 
 
 class TodoListTests(TestCase):
@@ -22,3 +26,20 @@ class TodoListTests(TestCase):
         response = self.client.get("/")
         self.assertContains(response, "Finish homework")
         self.assertContains(response, "Sept. 7, 2026")
+
+    def test_edit_todo(self):
+        """Submitting the edit form updates a TODO."""
+        todo = Todo.objects.create(
+            title="Draft homework",
+            due_date=date(2026, 9, 7),
+        )
+
+        response = self.client.post(
+            f"/{todo.pk}/edit/",
+            {"title": "Finish homework", "due_date": "2026-09-08"},
+        )
+
+        self.assertRedirects(response, "/")
+        todo.refresh_from_db()
+        self.assertEqual(todo.title, "Finish homework")
+        self.assertEqual(todo.due_date, date(2026, 9, 8))

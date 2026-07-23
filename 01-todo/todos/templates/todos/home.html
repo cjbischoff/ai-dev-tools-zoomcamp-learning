@@ -12,7 +12,10 @@
 {% if todos %}
 <ul>
     {% for todo in todos %}
-    <li>{{ todo.title }} — due {{ todo.due_date }}</li>
+    <li>
+        {{ todo.title }} — due {{ todo.due_date }}
+        <a href="{% url 'todos:edit' todo.pk %}">Edit</a>
+    </li>
     {% endfor %}
 </ul>
 {% else %}
