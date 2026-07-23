@@ -13,7 +13,7 @@
 <ul>
     {% for todo in todos %}
     <li>
-        {{ todo.title }} — due {{ todo.due_date }}
+        {{ todo.title }} — due {{ todo.due_date|date:"N j, Y" }}
         {% if todo.resolved %}
         <strong>Resolved</strong>
         {% else %}
