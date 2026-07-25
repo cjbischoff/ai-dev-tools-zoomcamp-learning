@@ -1,57 +1,139 @@
-# Module 1 — Django TODO App
+# Django TODO App
 
-Upstream materials: [Module 1 overview](https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/tree/main/01-overview)
-(2026 module page is a draft; content may change before Aug 31, 2026.)
+A small, tested Django application for managing TODOs with due dates. It is the
+Module 1 homework submission for the
+[DataTalksClub AI Dev Tools Zoomcamp](https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/tree/main/01-overview)
+and demonstrates a complete spec-to-tested-code workflow.
 
-## What the Module Teaches
+## Quick Start
 
-Workflow over tools: what you give an agent before it starts, how you steer it while it runs, how you verify what comes back. Build vehicle is a meeting cost calculator, but the deliverable is the workflow itself.
+Requirements:
 
-Lesson arc (11 lessons):
+- Python 3.12 or newer
+- [`uv`](https://docs.astral.sh/uv/)
 
-1. Introduction
-2. The Tool Map — five categories of AI dev tools; pick one for the cohort
-3. Specs Before Code — talk the design through, then write it down
-4. Bootstrapping a Project — spec into repo plus task backlog
-5. Context Engineering — the `AGENTS.md` every session starts from
-6. Grooming a Task — raw backlog item into acceptance criteria
-7. Implementing a Task — code against those criteria
-8. Testing a Task — verify from a session that did not write the code
-9. Loop Engineering — `/goal`, running the agent repeatedly
-10. Graph Engineering — PM / engineer / QA as separate agents working one backlog
-11. Wrap-up
+From the repository root:
 
-## Homework 1 (2026): Django TODO App
+```shell
+cd 01-todo
+uv sync --locked
+uv run python manage.py migrate
+uv run python manage.py runserver
+```
 
-Build a Django TODO app with an AI tool (no Django knowledge required). Features: create/edit/delete TODOs, due dates, mark resolved. Recommended stack: Python + `uv`, agent-mode IDE assistant.
+Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in a browser.
 
-Steps mirror the six graded questions:
+The SQLite development database is created locally as `db.sqlite3` and is
+excluded from git.
 
-- [x] Q1: Install Django (record the install command AI suggests)
-- [x] Q2: Create project + app; note which file registers the app in the project
-- [x] Q3: Define models; note the next step after models
-- [x] Q4: Implement TODO logic; note which file holds it
-- [x] Q5: Create `base.html` + `home.html`; note where the template directory is registered
-- [x] Q6: AI-generated tests — review scenarios, run them; note the test command
-- [x] Run with `uv run python manage.py runserver`, iterate until it works
-- [ ] Push code to GitHub in the root-level `01-todo/` folder, submit folder link
+## How It Works
 
-Submission form: [Homework 1](https://courses.datatalks.club/ai-dev-tools-2025/homework/hw1)
+```text
+Browser
+  → config/urls.py
+  → todos/urls.py
+  → todos/views.py
+  → TodoForm and Todo model
+  → SQLite and Django templates
+  → HTTP response
+```
 
-## Homework Code Location
+The Django project and application have separate responsibilities:
 
-Homework code and module notes live in this root-level `01-todo/` folder, which is the submission target.
+- `config/` contains project-wide settings, root URLs, and WSGI/ASGI entry points.
+- `todos/` contains the model, form, views, routes, templates, migration, and tests.
+- `Todo` stores a title, due date, and resolved state.
+- `TodoForm` validates title and due-date input.
+- Views use POST/Redirect/GET after successful mutations.
+- Resolve and delete views use `@require_POST`.
+- Templates include CSRF tokens for every modifying request.
+
+### Routes
+
+- `GET /` — display the create form and all TODOs
+- `POST /` — create a TODO
+- `GET /<id>/edit/` — display a populated edit form
+- `POST /<id>/edit/` — update a TODO
+- `POST /<id>/resolve/` — mark a TODO as resolved
+- `POST /<id>/delete/` — delete a TODO
+
+## Project Structure
+
+```text
+01-todo/
+├── config/
+│   ├── settings.py        # Installed apps, templates, middleware, SQLite
+│   └── urls.py            # Root URL routing
+├── todos/
+│   ├── migrations/        # Reproducible database schema
+│   ├── templates/todos/   # Base, list/create, and edit templates
+│   ├── forms.py           # Model-backed input validation
+│   ├── models.py          # Todo database model
+│   ├── tests.py           # 13 functional tests
+│   ├── urls.py            # Application routes
+│   └── views.py           # Create, edit, resolve, and delete behavior
+├── ANSWERS.md             # Answers to the six graded questions
+├── CLAUDE.md              # Homework specification and agent context
+├── manage.py              # Django command entry point
+├── pyproject.toml         # Python and Django requirements
+└── uv.lock                # Reproducible dependency versions
+```
 
 ## Testing
 
-Run all 13 functional tests from this folder:
+Run the complete suite:
 
 ```shell
 uv run python manage.py test
 ```
 
-The suite covers the empty state, creating and editing TODOs, validation failures, due dates, resolving and deleting TODOs, HTTP method restrictions, missing TODOs, and the complete create-to-delete workflow.
+Run the same checks used by CI:
 
-## Automated Tests
+```shell
+uv sync --locked
+uv run python manage.py check
+uv run python manage.py makemigrations --check --dry-run
+uv run python manage.py test
+```
 
-The GitHub Actions workflow at `.github/workflows/todo-tests.yml` installs locked dependencies, checks Django configuration and migrations, and runs the full test suite. It runs automatically when a push or pull request changes the TODO app or its workflow. It can also be started manually from the repository's **Actions** tab.
+The 13 tests cover:
+
+- Empty-list rendering
+- Valid and invalid creation
+- Edit-form population
+- Valid and invalid editing
+- Due-date rendering
+- Resolving TODOs
+- Resolved-state rendering
+- Deleting TODOs
+- POST-only mutation endpoints
+- Missing-record responses
+- The complete create → edit → resolve → delete workflow
+
+## Continuous Integration
+
+The [TODO test workflow](../.github/workflows/todo-tests.yml) runs on relevant
+pushes and pull requests and can also be started manually.
+
+It:
+
+1. Installs dependencies from `uv.lock`.
+2. checks Django configuration.
+3. rejects model changes without a migration.
+4. runs all 13 functional tests.
+
+## Design Scope
+
+This is intentionally the simplest application that satisfies the homework.
+It uses function-based views, Django templates, and SQLite with no additional
+runtime dependencies.
+
+It is development-only and does not include authentication, per-user TODOs,
+pagination, styling, deployment configuration, or production settings.
+
+## Homework References
+
+- [Homework answers](ANSWERS.md)
+- [Homework specification](CLAUDE.md)
+- [2026 course page](https://courses.datatalks.club/ai-dev-tools-2026/)
+- [Module 1 pull request](https://github.com/cjbischoff/ai-dev-tools-zoomcamp-learning/pull/1)
