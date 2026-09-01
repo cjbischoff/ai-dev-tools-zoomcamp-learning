@@ -2,36 +2,36 @@
 
 ## Purpose
 
-Coursework for [DataTalksClub AI Dev Tools Zoomcamp](https://github.com/DataTalksClub/ai-dev-tools-zoomcamp) (2026 cohort, starts August 31, 2026). Free course on AI-native software engineering: spec-driven development with coding agents, full-stack build/deploy, MCP/skills/plugins, and AI security/audit/DevOps tooling.
+Coursework for the [DataTalksClub AI Dev Tools Zoomcamp](https://github.com/DataTalksClub/ai-dev-tools-zoomcamp), 2026 cohort.
 
-Core course workflow: give AI tools the right context, use them for the right job, review what they produce, test the result, ship with guardrails.
+- Cohort materials: https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/tree/main/cohorts/2026
+
+The cohort README lists the modules, their scope, and due dates. Do not duplicate that list here. Each module's own scope lives in its subfolder README.
 
 ## Structure
 
-Folders mirror the course repo modules:
+One numbered folder per cohort module, plus the final project.
 
-| Folder | Module |
+| Folder | Upstream module |
 | --- | --- |
-| `01-overview/` | AI-Native Developer Workflow — spec, backlog, AGENTS.md, agent roles |
-| `01-todo/` | Module 1 homework: Django TODO app (root-level folder per homework instructions — submission form takes a link to this folder) |
-| `02-end-to-end/` | Full-stack app: spec, frontend, OpenAPI, FastAPI/Django backend, DB, tests, Docker, deploy, CI/CD |
-| `03-mcp/` | MCP, skills, plugins, hooks, subagents, custom agent extensions |
-| `04-ai-security-audit-devops/` | PR review, security scanning, audit, diagnostics tooling |
-| `project/` | Final project — end-to-end app, peer-reviewed for certificate |
+| `01/` | https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/tree/main/cohorts/2026/01-overview |
+| `02/` | https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/tree/main/cohorts/2026/02-development |
+| `03/` | https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/tree/main/cohorts/2026/03-deployment |
+| `04/` | https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/tree/main/cohorts/2026/04-devops |
+| `project/` | https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/tree/main/project |
 
 ## Conventions
 
-- One branch per module (e.g. `module/01-overview`), covering that module's learning notes AND homework. Merge to main when the module wraps.
-- Incremental commits within the branch — one logical change each (lesson notes, homework step, etc.), conventional-commit format.
-- Homework and notes live inside the matching module folder.
-- Each module gets its own README as work accumulates.
-- Global rules apply: conventional commits, GPG-signed, feature branches for work, no AI attribution in commits, TDD for new Python/TS/Go code, full docstrings on public functions.
-- Deployment constraint (org policy): no hosting on personal cloud accounts, random VPS, or free platforms (Vercel/Heroku/Netlify). Choose deployment targets for Module 2 and the final project accordingly — discuss options before deploying.
+- One branch per module (for example `module/01`), covering that module's notes and code. Merge to main when the module wraps.
+- Incremental commits within the branch — one logical change each, conventional-commit format.
+- Notes and code live inside the matching numbered folder.
+- Each module gets its own README as work accumulates. Module-specific detail belongs in the subfolder, not here.
+- Global rules apply: conventional commits, GPG-signed, feature branches, no AI attribution in commits, TDD for new Python/TS/Go code, full docstrings on public functions.
+- Deployment constraint (org policy): no hosting on personal cloud accounts, random VPS, or free platforms (Vercel/Heroku/Netlify). Discuss deployment targets before deploying.
 
 ## Key Links
 
 - Course platform: https://courses.datatalks.club/ai-dev-tools-2026/
-- Materials: https://github.com/DataTalksClub/ai-dev-tools-zoomcamp
-- Videos: https://www.youtube.com/playlist?list=PL3MmuxUbc_hLuyafXPyhTdbF4s_uNhc43
+- Materials: https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/tree/main/cohorts/2026
 - FAQ: https://datatalks.club/faq/ai-dev-tools-zoomcamp.html
 - Slack channel: #course-ai-dev-tools-zoomcamp on DataTalks.Club Slack
