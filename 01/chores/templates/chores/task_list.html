@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Household Chores</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <h1>Household Chores</h1>
+
+    <form method="post" action="{% url 'create_task' %}">
+        {% csrf_token %}
+        <input type="text" name="assignee" placeholder="Who?" required>
+        <input type="text" name="description" placeholder="What needs doing?" required>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <hr>
+
+    {% for assignee, tasks in grouped.items %}
+        <h2>{{ assignee }}</h2>
+        <ul>
+        {% for task in tasks %}
+            <li>
+                {% if task.is_done %}
+                    <s>{{ task.description }}</s>
+                {% else %}
+                    {{ task.description }}
+                    <form method="post" action="{% url 'mark_done' task.id %}" style="display:inline">
+                        {% csrf_token %}
+                        <button type="submit">Done</button>
+                    </form>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% empty %}
+        <p>No tasks yet.</p>
+    {% endfor %}
+</body>
+</html>
