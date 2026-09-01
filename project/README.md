@@ -1,5 +1,5 @@
-# project
+# project — Final Project
 
 Upstream materials: https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/tree/main/project
 
-Homework, notes, and code for this module land here.
+End-to-end app for the certificate, peer-reviewed. Notes and code land here.
