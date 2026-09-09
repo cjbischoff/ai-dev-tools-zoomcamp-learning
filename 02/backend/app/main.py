@@ -5,9 +5,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.database import MockDatabaseService
 from app.dependencies import get_db
 from app.routers import auth, boards, cards
+from app.sql_database import SqlDatabaseService
 
 
 @asynccontextmanager
@@ -18,9 +18,11 @@ async def lifespan(app: FastAPI):
     yield
 
 
-def _seed_demo_data(db: MockDatabaseService):
-    """Add initial users, boards, and cards for development."""
-    # Users
+def _seed_demo_data(db: SqlDatabaseService):
+    """Add initial users, boards, and cards for development. Idempotent."""
+    if db.get_user_by_username("alice"):
+        return  # Already seeded
+
     from app.dependencies import hash_password
     alice = db.create_user("alice", hash_password("pass123"))
     bob = db.create_user("bob", hash_password("pass123"))

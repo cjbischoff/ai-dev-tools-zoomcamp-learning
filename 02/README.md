@@ -57,4 +57,4 @@ uv run uvicorn app.main:app --reload
 
 ### Q6: Database
 
-**Test command:** `<fill>`
+**Test command:** `cd backend && uv run pytest`

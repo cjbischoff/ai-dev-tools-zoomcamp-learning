@@ -1,14 +1,14 @@
 import pytest
 from starlette.testclient import TestClient
 
-from app.database import MockDatabaseService
 from app.dependencies import get_db
+from app.sql_database import SqlDatabaseService
 
 
 @pytest.fixture
 def db():
-    """Fresh MockDatabaseService per test."""
-    return MockDatabaseService()
+    """Fresh in-memory SQLite database per test."""
+    return SqlDatabaseService(db_url="sqlite:///:memory:")
 
 
 @pytest.fixture

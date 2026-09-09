@@ -5,21 +5,21 @@ from typing import Optional
 
 from fastapi import Cookie, Depends, HTTPException, status
 
-from app.database import MockDatabaseService, User
+from app.database import User
+from app.sql_database import SqlDatabaseService
 
 
 # --- Global database service ---
-# Swapped for SQLAlchemy in Q6.
-_db = MockDatabaseService()
+_db = SqlDatabaseService()
 
 
-def get_db() -> MockDatabaseService:
+def get_db() -> SqlDatabaseService:
     """Dependency: returns the shared DB service."""
     return _db
 
 
-def set_db(db: MockDatabaseService) -> None:
-    """Replace the DB service (used for testing or Q6 swap)."""
+def set_db(db: SqlDatabaseService) -> None:
+    """Replace the DB service (used for testing)."""
     global _db
     _db = db
 
@@ -35,7 +35,7 @@ def hash_password(password: str) -> str:
 
 async def get_current_user(
     kanvas_session: Optional[str] = Cookie(None),
-    db: MockDatabaseService = Depends(get_db),
+    db: SqlDatabaseService = Depends(get_db),
 ) -> User:
     """Extract the authenticated user from the session cookie."""
     if not kanvas_session:
