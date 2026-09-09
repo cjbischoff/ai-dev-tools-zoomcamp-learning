@@ -41,11 +41,11 @@ uv run uvicorn app.main:app --reload
 
 ### Q2: GitHub Repository
 
-**SHA1:** `<fill after first commit>`
+**SHA1:** `c294d1c`
 
 ### Q3: Frontend prototype
 
-**Start command:** `<fill>`
+**Start command:** `cd frontend && npm run dev`
 
 ### Q4: Backend
 
