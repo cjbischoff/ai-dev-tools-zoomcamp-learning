@@ -1,5 +1,60 @@
-# 02 — Build and Ship an AI-Assisted Full-Stack App
+# Kanvas — Mini Kanban Board
 
-Upstream materials: https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/tree/main/cohorts/2026/02-development
+Kanvas is a lightweight, multi-user Kanban board built for the AI Dev Tools Zoomcamp (Module 2).
 
-Notes and code for this module land here.
+**Stack:** FastAPI + SQLAlchemy + SQLite (backend), vanilla/SPA frontend, OpenAPI contract.
+
+## Quick Start
+
+```bash
+# Frontend
+cd frontend
+npm install
+npm run dev
+
+# Backend
+cd backend
+uv sync
+uv run uvicorn app.main:app --reload
+```
+
+## Structure
+
+| Path | Purpose |
+|---|---|
+| `_docs/specs.md` | Product specification |
+| `frontend/` | SPA frontend |
+| `backend/` | FastAPI backend |
+| `openapi.yaml` | API contract |
+| `tests/` | Test suite |
+| `AGENTS.md` | AI agent context |
+
+---
+
+## Homework Answers
+
+### Q1: Spec first
+
+**App name:** Kanvas
+
+**Spec file:** `_docs/specs.md`
+
+### Q2: GitHub Repository
+
+**SHA1:** `<fill after first commit>`
+
+### Q3: Frontend prototype
+
+**Start command:** `<fill>`
+
+### Q4: Backend
+
+**Start command:** `<fill>`
+
+### Q5: Connect frontend and backend
+
+**Backend URL:** `<fill>`
+
+### Q6: Database
+
+**Test command:** `<fill>`
