@@ -53,7 +53,7 @@ uv run uvicorn app.main:app --reload
 
 ### Q5: Connect frontend and backend
 
-**Backend URL:** `<fill>`
+**Backend URL:** `http://localhost:8000`
 
 ### Q6: Database
 

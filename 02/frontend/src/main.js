@@ -38,5 +38,9 @@ router.on("/board/:id", async (params) => {
   renderBoardDetail(params);
 });
 
-// Start the router
-router.init();
+// Initialize session from cookie, then start router
+async function start() {
+  await api.initSession();
+  router.init();
+}
+start();
