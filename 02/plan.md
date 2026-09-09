@@ -101,3 +101,77 @@ Redirect to `#/login` if no user session; to `#/boards` if already logged in.
 ```bash
 cd frontend && npm install && npm run dev
 ```
+
+---
+
+# Kanvas — Backend Plan (Q4)
+
+## OpenAPI Contract
+
+REST API at `/api/` prefix. Auth via session cookies.
+
+| Method | Path | Purpose |
+|---|---|---|
+| POST | `/api/auth/register` | Register new user |
+| POST | `/api/auth/login` | Login |
+| POST | `/api/auth/logout` | Logout |
+| GET | `/api/auth/me` | Current user |
+| GET | `/api/boards` | List user's boards |
+| POST | `/api/boards` | Create board |
+| PUT | `/api/boards/{id}` | Rename board |
+| DELETE | `/api/boards/{id}` | Delete board |
+| GET | `/api/boards/{id}` | Board detail with cards + members |
+| POST | `/api/boards/{id}/cards` | Create card |
+| PUT | `/api/cards/{id}` | Update card |
+| DELETE | `/api/cards/{id}` | Delete card |
+| PATCH | `/api/cards/{id}/move` | Move card between columns |
+| PATCH | `/api/boards/{id}/reorder` | Reorder cards within column |
+| POST | `/api/boards/{id}/members` | Invite member |
+| DELETE | `/api/boards/{id}/members/{userId}` | Remove member |
+
+## Tech Stack
+
+| Choice | Why |
+|---|---|
+| **FastAPI** | Async, auto-docs, Pydantic validation |
+| **uv** | Package management |
+| **pytest + httpx** | Test client |
+| **MockDatabaseService** | In-memory dict store → swapped for SQLAlchemy in Q6 |
+
+## Directory Structure
+
+```
+backend/
+  pyproject.toml
+  app/
+    __init__.py
+    main.py              — FastAPI app, lifespan, CORS
+    schemas.py           — Pydantic request/response models
+    database.py          — Database service abstract base + mock impl
+    dependencies.py      — FastAPI dependency injection (get_db, get_current_user)
+    routers/
+      __init__.py
+      auth.py
+      boards.py
+      cards.py
+  tests/
+    __init__.py
+    conftest.py          — test client fixture + mock DB
+    test_auth.py
+    test_boards.py
+    test_cards.py
+```
+
+## Test-First Approach
+
+1. Write tests that define expected endpoint behavior
+2. Implement mock database service
+3. Wire endpoints
+4. Run tests green
+5. Update frontend `api.js` to call real backend
+
+## Start Command
+
+```bash
+cd backend && uv run uvicorn app.main:app --reload
+```

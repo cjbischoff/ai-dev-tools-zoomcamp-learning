@@ -49,7 +49,7 @@ uv run uvicorn app.main:app --reload
 
 ### Q4: Backend
 
-**Start command:** `<fill>`
+**Start command:** `cd backend && uv run uvicorn app.main:app --reload`
 
 ### Q5: Connect frontend and backend
 
