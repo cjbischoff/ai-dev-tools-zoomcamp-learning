@@ -1,0 +1,61 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: agent_relay
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv and run tests
+        env:
+          RELAY_DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/agent_relay
+        run: |
+          curl -sL https://astral.sh/uv/install.sh | sh
+          export PATH="$HOME/.local/bin:$PATH"
+          uv sync --frozen
+          uv run pytest -q
+
+  deploy:
+    needs: [test]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: |
+          # kind
+          curl -sL https://kind.sigs.k8s.io/dl/v0.33.0/kind-linux-amd64 -o /usr/local/bin/kind
+          chmod +x /usr/local/bin/kind
+          # kubectl
+          curl -sL https://dl.k8s.io/release/v1.34.1/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl
+          chmod +x /usr/local/bin/kubectl
+      - name: Build image
+        run: docker build -t agent-relay:ci-${{ github.sha }} .
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          kind get kubeconfig --name agent-relay > $HOME/.kube/config
+      - name: Deploy to kind
+        run: |
+          kind load docker-image agent-relay:ci-${{ github.sha }} --name agent-relay
+          kubectl set image deployment/agent-relay agent-relay=agent-relay:ci-${{ github.sha }}
+          kubectl rollout status deployment/agent-relay --timeout=120s

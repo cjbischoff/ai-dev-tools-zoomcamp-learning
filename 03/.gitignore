@@ -1,0 +1,7 @@
+agent-relay/.venv/
+agent-relay/__pycache__/
+agent-relay/**/__pycache__/
+agent-relay/.pytest_cache/
+agent-relay/*.db
+agent-relay/*.db-shm
+agent-relay/*.db-wal
