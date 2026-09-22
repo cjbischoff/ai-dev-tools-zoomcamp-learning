@@ -1,0 +1,42 @@
+# Autonomy Policy for Agent Relay
+#
+# Defines what actions the headless responder may take, at what confidence
+# thresholds, and with what verification gates.
+
+policy_version: "1.0"
+
+# Allowlisted actions the responder may propose.
+# Every action here must have a corresponding runbook script.
+actions:
+
+  - name: rollback
+    description: "Revert the last deployment to the previous known-good version."
+    min_confidence: 0.8
+    verification: required
+    runbook: "runbooks/rollback.sh"
+    requires_approval: true
+
+  - name: fix
+    description: "Commit a code change and deploy the fix."
+    min_confidence: 0.9
+    verification: required
+    runbook: "runbooks/verify-recovery.sh"
+    requires_approval: true
+
+  - name: escalate
+    description: "Escalate to a human operator with the evidence packet."
+    min_confidence: 0.0
+    verification: none
+    runbook: null
+    requires_approval: false
+
+# Escalation rules — when the responder cannot decide, or confidence is low.
+escalation:
+  on_low_confidence: true
+  on_unknown_action: true
+  notify_channel: "#ops"
+
+# Audit trail — every decision is logged here.
+logging:
+  decisions_to: "incidents/decisions.log"
+  evidence_retention_days: 30
