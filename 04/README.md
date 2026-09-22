@@ -20,3 +20,9 @@ Module 4 work for the AI Dev Tools Zoomcamp (2026): DevOps and Observability for
 Answers are added and committed one question at a time as each is reviewed and approved.
 
 ### Q1: Instrumentation
+
+**Answer:** Metrics, logs, and traces
+
+Observability rests on three signal types — metrics (quantitative measurements), logs (structured event records), and traces (end-to-end request paths). The module instruments one endpoint end to end with all three via OpenTelemetry, without leaking secrets. CPU graphs alone are infrastructure monitoring, not observability — they cannot tell you which endpoint failed or why.
+
+**Evidence:** Module intro: "Instrument one endpoint end to end with OpenTelemetry — metrics, traces, and structured logs — without leaking secrets."
