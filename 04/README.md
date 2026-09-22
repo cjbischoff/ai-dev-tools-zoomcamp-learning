@@ -62,3 +62,27 @@ The module says: "Write one alert that represents real user impact and carries e
 **Answer:** Semgrep
 
 The module specifies: "Run recurring security audits that combine a deterministic scanner (Semgrep), model review, and human validation." Pytest (unit tests), Playwright (browser tests), and Terraform (infrastructure) serve different purposes.
+
+### Q8: Incident report
+
+**Answer:** See `docs/operations-and-security-report.md` for the full report.
+
+**Summary:** A deployment (commit `a574cf0`) introduced a 1-line logic error in
+`claim_one()` that prevented workers from claiming tasks — all claims returned
+204 No Content. The Prometheus alert fired within 1 minute. The evidence script
+collected git log, health checks, agent list, container state, and diffstat
+(7 allowlisted queries, 3 seconds). A headless responder analyzed the packet
+and proposed `rollback` at 0.92 confidence. The operator authorized the
+rollback per the autonomy policy. Recovery was verified with the
+`verify-recovery.sh` runbook. Total user-impact duration: ~4 minutes.
+
+**Incident loop:**
+- Change: deploy of a574cf0
+- Observe: alert fires on claim endpoint error rate
+- Alert: HighErrorRate rule (5% threshold, 1m for)
+- Investigate: evidence packet collected read-only
+- Responder: proposes rollback with 0.92 confidence
+- Authorize: operator approves per autonomy policy (≥ 0.8)
+- Rollback: revert to fb6cca5, rebuild, restart
+- Verify: health + readiness + full task lifecycle pass
+- Audit: Semgrep scan → model review → human validation, 4 findings closed

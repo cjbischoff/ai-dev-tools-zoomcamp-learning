@@ -1,0 +1,15 @@
+{
+  "incident_id": "INC-001",
+  "confidence": 0.92,
+  "action": "rollback",
+  "rationale": "Evidence shows all endpoints healthy except POST /api/v1/tasks/claim which returns 204 No Content for all claim attempts, and POST /api/v1/tasks/{task_id}/complete which returns 404 for the task the sender created. The alert shows a 5xx rate above 5% on the claim path. The diffstat shows a 1-line change to storage.py. The likely root cause is a logic error introduced in the claim_one() function — possibly an early return or condition that prevents matching queued tasks to claiming workers. Rollback the previous deployment to restore the working claim flow.",
+  "evidence_summary": {
+    "commits_since_deploy": [
+      "a574cf0 feat: add incident response and security audit scaffold"
+    ],
+    "error_rate_change": "POST /api/v1/tasks/claim 5xx rate jumped from 0% to effectively 100% (all claims return 204, tasks stuck in 'queued'). Not literal 5xx but functional failure: worker cannot claim tasks.",
+    "suspicious_changes": [
+      "storage.py (1 line) — the claim_one function is the only place claim logic lives"
+    ]
+  }
+}
