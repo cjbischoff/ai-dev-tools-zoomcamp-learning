@@ -1,0 +1,17 @@
+{
+  "incident_id": "INC-24693CDF",
+  "received_at": "2026-09-28T17:01:02.092865+00:00",
+  "alert": {
+    "alerts": [
+      {
+        "status": "firing",
+        "labels": {
+          "alertname": "VerifyTest"
+        },
+        "annotations": {
+          "summary": "Quick verification test"
+        }
+      }
+    ]
+  }
+}

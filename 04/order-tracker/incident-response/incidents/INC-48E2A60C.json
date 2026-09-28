@@ -1,0 +1,18 @@
+{
+  "incident_id": "INC-48E2A60C",
+  "received_at": "2026-09-28T16:57:38.482011+00:00",
+  "alert": {
+    "alerts": [
+      {
+        "status": "firing",
+        "labels": {
+          "alertname": "ResponderTest",
+          "test": "true"
+        },
+        "annotations": {
+          "summary": "Test notification; no incident to fix"
+        }
+      }
+    ]
+  }
+}
