@@ -1,88 +1,84 @@
-# Operations and Security — Module 4
+# DevOps and Observability — Module 4
 
-Module 4 work for the AI Dev Tools Zoomcamp (2026): DevOps and Observability for AI-Built Apps. Builds on the deployed Agent Relay app from Module 3.
+Work for the [AI Dev Tools Zoomcamp 2026](https://github.com/DataTalksClub/ai-dev-tools-zoomcamp) —
+Module 4: DevOps and Observability for AI-Built Apps. Based on the
+[Order Tracker](https://github.com/alexeygrigorev/order-tracker) starter app.
 
-**Loop:** change → observe user impact → alert with context → investigate from evidence → authorize a bounded response or escalate → verify recovery → audit the code and the response trail.
+**Stack:** FastAPI + SQLite + OpenTelemetry → Collector → Prometheus / Loki / Tempo → Grafana, plus an incident responder on port 8001.
 
-**Stack:** OpenTelemetry → Collector → Prometheus / Loki / Tempo → Grafana, plus a headless coding agent (read-only first responder) behind an allowlisted autonomy policy.
-
-## Deliverables (planned)
+## Structure
 
 | Path | Purpose |
 |---|---|
-| `observability/` | collector.yaml, compose.yaml, dashboard.json, alerts.yaml |
-| `incident-response/` | collect-evidence.sh, responder task + schema, autonomy policy, runbooks, incidents |
-| `security-audit/` | audit brief, findings schema, capability table, runs |
-| `docs/operations-and-security-report.md` | Final report: one incident ID reconstructs the whole loop |
+| `order-tracker/` | Instrumented Order Tracker app + all homework artifacts |
+| `order-tracker/app/` | FastAPI app with OpenTelemetry instrumentation |
+| `order-tracker/observability/` | OTel Collector, Prometheus, Loki, Tempo, Grafana configs |
+| `order-tracker/incident-response/` | Responder service + headless agent for incident handling |
+| `README.md` | This file — homework answers |
+
+## Quick Start
+
+```bash
+cd order-tracker
+docker compose up --build -d --wait
+```
+
+Open http://localhost:8000 (app), http://localhost:3000 (Grafana).
 
 ## Homework Answers
 
-Answers are added and committed one question at a time as each is reviewed and approved.
+### Q1: Run the app
 
-### Q1: Instrumentation
+Health check returns `{"status":"ok"}`.
 
-**Answer:** Metrics, logs, and traces
+### Q2: Instrument one endpoint
 
-Observability rests on three signal types — metrics (quantitative measurements), logs (structured event records), and traces (end-to-end request paths). The module instruments one endpoint end to end with all three via OpenTelemetry, without leaking secrets. CPU graphs alone are infrastructure monitoring, not observability — they cannot tell you which endpoint failed or why.
+Looked up `standard-1001` → HTTP status code in the metric: **200**.
 
-**Evidence:** Module intro: "Instrument one endpoint end to end with OpenTelemetry — metrics, traces, and structured logs — without leaking secrets."
+The app was instrumented with OpenTelemetry (traces, metrics, logs) exporting to console. The metric includes route and HTTP status code labels (`http.target`, `http_status_code`).
 
-### Q2: The telemetry pipeline
+### Q3: Build the telemetry pipeline
 
-**Answer:** OpenTelemetry
+Looked up `standard-1002` (does not exist) → HTTP status code in the metric: **404**.
 
-The module's concrete stack is "OpenTelemetry into Prometheus, Loki, and Tempo, with Grafana on top." OpenTelemetry is the vendor-neutral instrumentation standard for generating, collecting, and exporting telemetry data. OpenAPI (API contracts), OAuth (auth), and OpenSSL (crypto) are unrelated.
+Full pipeline configured:
+- App exports OTLP to Collector
+- Collector fans out: metrics → Prometheus, traces → Tempo, logs → debug
+- Grafana provisions datasources and dashboard automatically
 
-### Q3: Dashboards
+### Q4: Configure the alert
 
-**Answer:** Grafana
+Configured Grafana managed alert rule `High5xxRate`. Expression:
+```
+rate(order_tracker_http_server_duration_milliseconds_count{http_status_code=~"5.."}[1m]) > 0
+```
+`noDataState: OK` handles periods with no 5xx responses. With no 5xx errors the alert state is **Normal** (inactive).
 
-"Grafana on top" — the module wires OpenTelemetry Collector feeding Prometheus, Loki, and Tempo, all viewed together in Grafana. pgAdmin is a Postgres admin tool, Excel is a spreadsheet, and VS Code is an editor.
+### Q5: Build the automatic responder
 
-### Q4: Alerts
+Created `incident-response/responder.py` — FastAPI service on port 8001 with `POST /alerts`. When alert arrives, it saves the payload and dispatches a headless agent (`incident-response/agent.py`).
 
-**Answer:** Real user impact, with context to start investigating
+Test alert sent. Agent responded — last line: `Analysis complete. No action needed — this is a test notification.`
 
-The module says: "Write one alert that represents real user impact and carries enough context in its payload to act on." CPU spikes, every log line, or deployment notifications are not user-impact alerts.
+### Q6: Watch the agent fix the incident
 
-### Q5: Evidence first
+`curl http://localhost:8000/api/orders/express-1002` returned **500 Internal Server Error**.
 
-**Answer:** With read-only, allowlisted queries
+**Root cause:** The express delivery date calculation used `placed_at.replace(day=placed_at.day + 2)`. When `placed_at` is the last day of a month (Aug 31 for the seed data), `day + 2` exceeds the month boundary (33), causing `ValueError`.
 
-"Collect a bounded, repeatable evidence packet with read-only, allowlisted queries before any model gets involved." Full production admin credentials, trial-and-error on the database, or letting the model decide what to look at all violate the evidence-before-model principle.
+**Fix:** Changed to `placed_at + timedelta(days=2)`.
 
-### Q6: The agent responder
+After fix: `curl http://localhost:8000/api/orders/express-1002` returns **200 OK** with `estimated_delivery: "2026-09-02"`.
 
-**Answer:** The autonomy policy and allowlists — code outside the model
+## Deliverables
 
-"What it does not get is general production credentials. A model supplies confidence; code outside the model enforces permission." Model confidence, alert severity, or autonomous action are explicitly rejected — the module gates action behind allowlists and autonomy levels.
-
-### Q7: Security audit
-
-**Answer:** Semgrep
-
-The module specifies: "Run recurring security audits that combine a deterministic scanner (Semgrep), model review, and human validation." Pytest (unit tests), Playwright (browser tests), and Terraform (infrastructure) serve different purposes.
-
-### Q8: Incident report
-
-**Answer:** See `docs/operations-and-security-report.md` for the full report.
-
-**Summary:** A deployment (commit `a574cf0`) introduced a 1-line logic error in
-`claim_one()` that prevented workers from claiming tasks — all claims returned
-204 No Content. The Prometheus alert fired within 1 minute. The evidence script
-collected git log, health checks, agent list, container state, and diffstat
-(7 allowlisted queries, 3 seconds). A headless responder analyzed the packet
-and proposed `rollback` at 0.92 confidence. The operator authorized the
-rollback per the autonomy policy. Recovery was verified with the
-`verify-recovery.sh` runbook. Total user-impact duration: ~4 minutes.
-
-**Incident loop:**
-- Change: deploy of a574cf0
-- Observe: alert fires on claim endpoint error rate
-- Alert: HighErrorRate rule (5% threshold, 1m for)
-- Investigate: evidence packet collected read-only
-- Responder: proposes rollback with 0.92 confidence
-- Authorize: operator approves per autonomy policy (≥ 0.8)
-- Rollback: revert to fb6cca5, rebuild, restart
-- Verify: health + readiness + full task lifecycle pass
-- Audit: Semgrep scan → model review → human validation, 4 findings closed
+| File | Purpose |
+|---|---|
+| `app/otel.py` | OTel setup (console or OTLP export) |
+| `app/main.py` | Instrumented app + date bug fix |
+| `pyproject.toml` | OTel SDK dependencies |
+| `compose.yaml` | 7 services: app, collector, Prometheus, Loki, Tempo, Grafana, responder |
+| `observability/` | 8 config files for the telemetry stack |
+| `incident-response/responder.py` | POST /alerts service on port 8001 |
+| `incident-response/agent.py` | Headless incident analysis agent |
+| `incident-response/incidents/` | Recorded test incidents |
